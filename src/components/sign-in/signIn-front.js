@@ -43,6 +43,13 @@ const styles = {
         color: "white",
         borderRadius: 4,
     },
+    errorMessage: {
+        fontSize: "1.2rem",
+        color: "var(--color-red)",
+        textAlign: "center",
+        marginTop: "1rem",
+        animation: "blink 1s linear infinite",
+    }
 };
 
 const FORM_FIELDS = {
@@ -65,7 +72,7 @@ const INITIAL_ERROR_STATE = {
     [FORM_FIELDS.PASSWORD]: false,
 };
 
-const SignInFront = ({classes, onSubmit}) => {
+const SignInFront = ({classes, onSubmit, errorMessage}) => {
     const [formState, setFormState] = useState(INITIAL_FORM_STATE);
     const [formErrorState, setFormErrorState] = useState(INITIAL_ERROR_STATE);
     function handleOnSubmit(event) {
@@ -77,7 +84,10 @@ const SignInFront = ({classes, onSubmit}) => {
         setFormErrorState(formErrorState);
         const isNotValidForm = Object.values(formErrorState).some(v => v);
         if (isNotValidForm) return null;
-        onSubmit();
+        onSubmit({
+            [FORM_FIELDS.USERNAME]: formState[FORM_FIELDS.USERNAME],
+            [FORM_FIELDS.PASSWORD]: formState[FORM_FIELDS.PASSWORD],
+        });
     }
     function handleOnChange(event) {
         const {name, value} = event.target;
@@ -119,6 +129,11 @@ const SignInFront = ({classes, onSubmit}) => {
                     className={classes.button}>
                     Sign IN!
                 </button>
+                <p
+                    className={classes.errorMessage}
+                    data-testid={"errorMessage"}>
+                    {errorMessage}
+                </p>
             </form>
         </div>
     );

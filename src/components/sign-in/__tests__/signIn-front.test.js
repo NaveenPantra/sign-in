@@ -22,6 +22,7 @@ const DOMSelectors = {
     emailInput: 'input[type="email"]',
     passwordInput: 'input[type="password"]',
     submitButton: 'button[type="submit"]',
+    errorMessage: 'p[data-testid="errorMessage"]',
 };
 
 describe("Test for SignIn Front", function() {
@@ -37,7 +38,8 @@ describe("Test for SignIn Front", function() {
     test("Successful Submission", function() {
         ReactDOM.render(
             <SignInFront
-                onSubmit={SPY_FUNCTIONS.onSubmit}/>,
+                onSubmit={SPY_FUNCTIONS.onSubmit}
+                errorMessage={""}/>,
             container
         );
         let DOMElements = getDOMElements();
@@ -63,13 +65,15 @@ describe("Test for SignIn Front", function() {
             Simulate.submit(DOMElements.form);
         });
         expect(SPY_FUNCTIONS.onSubmit).toHaveBeenCalledTimes(1);
+        expect(DOMElements.errorMessage.textContent).toEqual("");
     });
 
-    test("Submitting Invalid data", function() {
+    test("Submitting Invalid data and Error Message", function() {
         jest.clearAllMocks();
         ReactDOM.render(
             <SignInFront
-                onSubmit={SPY_FUNCTIONS.onSubmit}/>,
+                onSubmit={SPY_FUNCTIONS.onSubmit}
+                errorMessage={"Custom Error"}/>,
             container
         );
         let DOMElements = getDOMElements();
@@ -95,6 +99,7 @@ describe("Test for SignIn Front", function() {
             Simulate.submit(DOMElements.form);
         });
         expect(SPY_FUNCTIONS.onSubmit).toHaveBeenCalledTimes(0);
+        expect(DOMElements.errorMessage.textContent).toEqual("Custom Error");
     });
 });
 

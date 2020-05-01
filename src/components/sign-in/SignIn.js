@@ -41,14 +41,19 @@ async function fakeTimeWait(time) {
 const SignIn = ({classes}) => {
     const innerRef = useRef();
     const [isLoading, setIsLoading] = useState(false);
-    async function onSubmit() {
-        console.log("submitted");
+    const [errorMessage, setErrorMessage] = useState("");
+    async function onSubmit(credentials) {
         innerRef.current.classList.add("rotate_card");
         setIsLoading(true);
         await fakeTimeWait(4000);
-        checkForValidCredentials().then(() => {
+        checkForValidCredentials(credentials).then(() => {
+            setErrorMessage("");
             setIsLoading(false);
-        });
+        }).catch(err => {
+            innerRef.current.classList.remove("rotate_card");
+            setIsLoading(false);
+            setErrorMessage(err.message);
+        })
     }
 
     return (
@@ -59,7 +64,8 @@ const SignIn = ({classes}) => {
                 id={"inner"}
                 ref={innerRef}>
                 <SignInFront
-                    onSubmit={onSubmit}/>
+                    onSubmit={onSubmit}
+                    errorMessage={errorMessage}/>
                 <SignInBack
                     isLoading={isLoading}/>
             </div>

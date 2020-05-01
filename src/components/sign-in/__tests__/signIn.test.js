@@ -11,7 +11,10 @@ import {FORM_FIELDS} from "../signIn-front";
 
 jest.useFakeTimers();
 jest.mock("./../../../services/Sign-in/SignInService", () => ({
-    checkForValidCredentials: jest.fn(async () => Promise.resolve()),
+    checkForValidCredentials: jest.fn(async (credentials) => {
+        if (credentials.password === "Cr7naveeN") return Promise.reject({message: "Custom Error"});
+        return Promise.resolve();
+    }),
 }));
 
 let container = null;
@@ -20,6 +23,7 @@ const DOMSelectors = {
     emailInput: 'input[type="email"]',
     passwordInput: 'input[type="password"]',
     submitButton: 'button[type="submit"]',
+    errorMessage: 'p[data-testid="errorMessage"]',
 };
 
 describe("Testing SignIn Component", function() {
@@ -62,6 +66,40 @@ describe("Testing SignIn Component", function() {
         });
         await wait (() => {}, {timeout: 0});
         expect(SignInServiceMock.checkForValidCredentials).toHaveBeenCalledTimes(1);
+        expect(DOMElements.errorMessage.textContent).toEqual("");
+    });
+
+    test("UnSuccessful Submission and Error Message", async function() {
+        ReactDOM.render(
+            <SignIn/>,
+            container
+        );
+        let DOMElements = getDOMElements();
+        act(function () {
+            Simulate.change(DOMElements.emailInput, {
+                target: {
+                    name: FORM_FIELDS.USERNAME,
+                    value: "naveenpantra.np@gmail.com",
+                },
+            });
+        });
+        expect(DOMElements.emailInput.value).toEqual("naveenpantra.np@gmail.com");
+        act(function () {
+            Simulate.change(DOMElements.passwordInput, {
+                target: {
+                    name: FORM_FIELDS.PASSWORD,
+                    value: "Cr7naveeN",
+                },
+            });
+        });
+        expect(DOMElements.passwordInput.value).toEqual("Cr7naveeN");
+        act(function () {
+            Simulate.submit(DOMElements.form);
+            jest.runAllTimers();
+        });
+        await wait (() => {}, {timeout: 0});
+        expect(SignInServiceMock.checkForValidCredentials).toHaveBeenCalledTimes(2);
+        expect(DOMElements.errorMessage.textContent).toEqual("Custom Error");
     });
 });
 

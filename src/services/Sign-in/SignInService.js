@@ -1,5 +1,5 @@
 const SIGN_IN_SERVICE_URLS = {
-    BASE_URL: `http://www.mocky.io/v2/5d9d9219310000153650e30b`,
+    BASE_URL: `https://www.mocky.io/v2/5d9d9219310000153650e30b`,
 };
 
 async function checkForValidCredentials() {

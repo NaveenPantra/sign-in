@@ -18,12 +18,17 @@ jest.mock("./../../../services/Sign-in/SignInService", () => ({
 }));
 
 let container = null;
+const CONSTANTS = {
+    ROTATE_CARD_CLASS: 'rotate_card',
+}
 const DOMSelectors = {
+    inner: 'div[data-testid="inner"]',
     form: 'form',
     emailInput: 'input[type="email"]',
     passwordInput: 'input[type="password"]',
     submitButton: 'button[type="submit"]',
     errorMessage: 'p[data-testid="errorMessage"]',
+    backButton: 'button[data-testid="backButton"]',
 };
 
 describe("Testing SignIn Component", function() {
@@ -67,6 +72,14 @@ describe("Testing SignIn Component", function() {
         await wait (() => {}, {timeout: 0});
         expect(SignInServiceMock.checkForValidCredentials).toHaveBeenCalledTimes(1);
         expect(DOMElements.errorMessage.textContent).toEqual("");
+        DOMElements = getDOMElements();
+        expect(DOMElements.backButton).toBeTruthy();
+        expect([...DOMElements.inner.classList].includes(CONSTANTS.ROTATE_CARD_CLASS)).toBeTruthy();
+        act(function() {
+            Simulate.click(DOMElements.backButton, {});
+        });
+        expect([...DOMElements.inner.classList].includes(CONSTANTS.ROTATE_CARD_CLASS)).toBeFalsy();
+
     });
 
     test("UnSuccessful Submission and Error Message", async function() {

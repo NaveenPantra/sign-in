@@ -108,6 +108,7 @@ const SignInBack = ({classes, isLoading, backClickHandler}) => {
                     (
                         <button
                             className={classes.backButton}
+                            data-testid={"backButton"}
                             onClick={backClickHandler}>
                             <div className={classes.backArrow}/>
                         </button>

@@ -68,6 +68,7 @@ const SignIn = ({classes}) => {
             <div
                 className={`${classes.inner}`}
                 id={"inner"}
+                data-testid={'inner'}
                 ref={innerRef}>
                 <SignInFront
                     onSubmit={onSubmit}

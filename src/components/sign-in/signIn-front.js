@@ -3,7 +3,6 @@ import withStyles from "react-jss";
 import HealthifyMeCompleteLogo from "./../../assets/images/healthifyMe_complete_logo.png";
 import Input from "../UI/Input/Input";
 import {isNotValidEmailAddress, isNotValidPassword} from "../../utils/helpers/validationHelpers";
-import {checkForValidCredentials} from "../../services/Sign-in/SignInService";
 
 const styles = {
     root: {

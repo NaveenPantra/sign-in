@@ -53,7 +53,13 @@ const SignIn = ({classes}) => {
             innerRef.current.classList.remove("rotate_card");
             setIsLoading(false);
             setErrorMessage(err.message);
-        })
+        });
+    }
+
+    function backClickHandler() {
+        innerRef.current.classList.remove("rotate_card");
+        setIsLoading(false);
+        setErrorMessage('');
     }
 
     return (
@@ -67,7 +73,8 @@ const SignIn = ({classes}) => {
                     onSubmit={onSubmit}
                     errorMessage={errorMessage}/>
                 <SignInBack
-                    isLoading={isLoading}/>
+                    isLoading={isLoading}
+                    backClickHandler={backClickHandler}/>
             </div>
         </section>
     );

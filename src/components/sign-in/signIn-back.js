@@ -14,6 +14,57 @@ const styles = {
         transform: "rotateY(180deg)",
         padding: "3rem",
     },
+    backButton: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "4rem",
+        height: "4rem",
+        position: "absolute",
+        top: "1rem",
+        left: "1rem",
+        borderRadius: "50%",
+        boxShadow: "var(--shadow-light)",
+        opacity: .5,
+        transition: "all .3s linear",
+        "&:hover": {
+            boxShadow: "var(--shadow-dark)",
+            opacity: 1,
+        },
+        "&:after": {
+            content: '""',
+            position: "absolute",
+            display: "block",
+            top: "50%",
+            left: "50%",
+            width: "53%",
+            transform: "translate(-53%, -79%)",
+            borderTop: "3px solid var(--color-text)",
+            borderRadius: 10,
+        },
+    },
+    backArrow: {
+        display: "block",
+        position: "relative",
+        width: "70%",
+        "&:after, &:before": {
+            content: '""',
+            position: "absolute",
+            display: "block",
+            borderTop: "2px solid var(--color-text)",
+            borderRadius: 10,
+            width: "49%",
+            top: 0,
+            left: 0,
+            transformOrigin: "left",
+        },
+        "&:after": {
+            transform: "translate(1px, -2px) rotateZ(-40deg)",
+        },
+        "&:before": {
+            transform: "translate(1px, -3px) rotateZ(40deg)",
+        },
+    },
     figure: {
         display: "flex",
         alignItems: "center",
@@ -49,9 +100,21 @@ const styles = {
     },
 };
 
-const SignInBack = ({classes, isLoading}) => {
+const SignInBack = ({classes, isLoading, backClickHandler}) => {
     return (
         <div className={classes.root}>
+            {
+                !isLoading ?
+                    (
+                        <button
+                            className={classes.backButton}
+                            onClick={backClickHandler}>
+                            <div className={classes.backArrow}/>
+                        </button>
+                    )
+                    :
+                    null
+            }
             <figure
                 className={`${classes.figure} ${isLoading ? classes.figureCenter : ""}`}>
                 <img
